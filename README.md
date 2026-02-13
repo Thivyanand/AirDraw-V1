@@ -52,12 +52,20 @@ Instead of using a full 3D engine, this project:
 This makes it a lightweight custom 3D engine built from scratch.
 
 ---
+##Create Virtual Evironment 
 
-## 📦 Installation
+python -m venv venv
 
-### 1️⃣ Clone Repository
+venv\Scripts\activate
 
-```bash
-git clone https://github.com/YOUR_USERNAME/AirConstruct.git
-cd AirConstruct
+
+## 📦 Install Dependencies 
+pip install opencv-python mediapipe numpy
+
+
+##Run 
+python airconstruct.py
+
+
+
 
