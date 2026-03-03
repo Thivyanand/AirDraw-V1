@@ -3,12 +3,12 @@ import mediapipe as mp
 import numpy as np
 import math
 
-# -------- MediaPipe --------
+# MP
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(max_num_hands=1)
 cap = cv2.VideoCapture(0)
 
-# -------- 3D World --------
+# 3d
 cubes = []
 pinch_active = False
 dragging_cube = None
@@ -20,7 +20,7 @@ SNAP_DISTANCE = 1.0
 scene_rot_x = 0
 scene_rot_y = 0
 
-# -------- 3D Cube Vertices --------
+#3d veertices
 cube_vertices = np.array([
     [-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],
     [-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]
@@ -32,7 +32,7 @@ edges = [
     (0,4),(1,5),(2,6),(3,7)
 ]
 
-# -------- 3D Rotation --------
+# 3d rotat
 def rotate_point(point, rx, ry):
     x, y, z = point
 
@@ -46,7 +46,7 @@ def rotate_point(point, rx, ry):
 
     return np.array([x, y, z])
 
-# -------- Projection --------
+# projection
 def project(point, width, height):
     fov = 400
     z = point[2] + 5
@@ -57,7 +57,7 @@ def project(point, width, height):
     y = int(-point[1] * factor + height/2)
     return (x, y)
 
-# -------- Snap --------
+# magnetic
 def snap_position(pos):
     for cube in cubes:
         dist = np.linalg.norm(np.array(pos) - np.array(cube))
@@ -65,7 +65,7 @@ def snap_position(pos):
             return [cube[0] + 1, cube[1], cube[2]]
     return pos
 
-# -------- Main Loop --------
+#main
 while True:
 
     ret, frame = cap.read()
@@ -80,16 +80,16 @@ while True:
 
             lm = hand_landmarks.landmark
 
-            # Hand → World coords
+            # Hand
             x = (lm[8].x - 0.5) * WORLD_SCALE * 4
             y = -(lm[8].y - 0.5) * WORLD_SCALE * 3
             z = -2
 
-            # Wrist rotation
+            # wrist rotation
             scene_rot_x = (lm[5].y - lm[0].y) * 3
             scene_rot_y = (lm[5].x - lm[0].x) * 3
 
-            # Pinch
+            #pinchh
             pinch = math.hypot(
                 lm[4].x - lm[8].x,
                 lm[4].y - lm[8].y
@@ -107,7 +107,7 @@ while True:
                 dragging_cube = None
                 pinch_active = False
 
-            # Delete (fist)
+            # close hand delete
             fingers = [
                 lm[8].y < lm[6].y,
                 lm[12].y < lm[10].y,
@@ -117,7 +117,7 @@ while True:
             if fingers.count(True) == 0 and len(cubes) > 0:
                 cubes.pop()
 
-    # -------- Draw Scene --------
+    # draw screne
     for cube in cubes + ([dragging_cube] if dragging_cube else []):
         if cube is None:
             continue
@@ -139,3 +139,4 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+
