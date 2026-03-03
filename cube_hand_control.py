@@ -5,13 +5,13 @@ from OpenGL.GLU import *
 import cv2
 import mediapipe as mp
 
-# -------- MediaPipe Setup --------
+#mp setup
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(max_num_hands=1)
 
 cap = cv2.VideoCapture(0)
 
-# -------- Cube Data --------
+# cude data
 vertices = (
     (1, -1, -1),
     (1, 1, -1),
@@ -69,7 +69,7 @@ rotate_y = 0
 
 while True:
 
-    # -------- Hand Tracking --------
+    # hand trackig
     ret, frame = cap.read()
     frame = cv2.flip(frame, 1)
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -84,7 +84,7 @@ while True:
             rotate_y = (x - w//2) * 0.1
             rotate_x = (y - h//2) * 0.1
 
-    # -------- OpenGL Rendering --------
+    #gl render
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -103,3 +103,4 @@ while True:
 
     pygame.display.flip()
     pygame.time.wait(10)
+
