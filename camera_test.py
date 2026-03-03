@@ -1,6 +1,6 @@
 import cv2
 
-# Open default camera (0 = laptop webcam)
+#0 is the deafult
 cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
@@ -16,9 +16,10 @@ while True:
 
     cv2.imshow("Camera Test - Press ESC to Exit", frame)
 
-    # Press ESC key to exit
+    # esc to exit
     if cv2.waitKey(1) & 0xFF == 27:
         break
 
 cap.release()
 cv2.destroyAllWindows()
+
