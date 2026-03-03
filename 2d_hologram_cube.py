@@ -14,7 +14,7 @@ dragging_cube = None
 
 SNAP_DISTANCE = 70
 
-# ---------------- Draw Hologram Cube ---------------- #
+#draw cube
 def draw_hologram_cube(frame, center, size=35, glow=True):
     x, y = center
     s = size
@@ -47,7 +47,7 @@ def draw_hologram_cube(frame, center, size=35, glow=True):
         for i in range(4):
             cv2.line(frame, tuple(front[i]), tuple(back[i]), color, 1)
 
-# ---------------- Main Loop ---------------- #
+#main
 while True:
     ret, frame = cap.read()
     frame = cv2.flip(frame, 1)
@@ -66,12 +66,12 @@ while True:
 
             distance = math.hypot(x2 - x1, y2 - y1)
 
-            # ---- Pinch START ----
+            #pinch st
             if distance < 35 and not pinch_active:
                 dragging_cube = [x2, y2]
                 pinch_active = True
 
-            # ---- While Pinching → Drag with Magnetic Snap ----
+            # magnet snapp
             if distance < 35 and pinch_active and dragging_cube:
 
                 snap_x, snap_y = x2, y2
@@ -92,13 +92,13 @@ while True:
                 dragging_cube[0] = snap_x
                 dragging_cube[1] = snap_y
 
-            # ---- Pinch RELEASE → Place ----
+            # place it
             if distance > 40 and pinch_active:
                 cubes.append(dragging_cube)
                 dragging_cube = None
                 pinch_active = False
 
-    # --------- Glow Layer (Draw Once, Blend Once) --------- #
+    # glow cube
     glow_layer = frame.copy()
 
     for cube in cubes:
@@ -110,7 +110,7 @@ while True:
     glow_layer = cv2.GaussianBlur(glow_layer, (15, 15), 0)
     cv2.addWeighted(glow_layer, 0.4, frame, 0.6, 0, frame)
 
-    # --------- Draw Sharp Edges On Top --------- #
+    # esges
     for cube in cubes:
         draw_hologram_cube(frame, cube, glow=False)
 
@@ -124,3 +124,4 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+
